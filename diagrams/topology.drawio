@@ -1,0 +1,87 @@
+
+<mxfile host="app.diagrams.net" modified="2025-11-10T09:46:00.000Z" agent="Grok" type="device">
+  <diagram name="MikroTik Topology" id="mikrotik-topology">
+    <mxGraphModel dx="800" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        
+        <!-- Internet -->
+        <mxCell id="internet" value="Інтернет&#xa;(ISP)" style="shape=cloud;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="50" y="200" width="100" height="80" as="geometry"/>
+        </mxCell>
+        
+        <!-- MikroTik -->
+        <mxCell id="router" value="MikroTik Router&#xa;192.168.88.1" style="shape=mxgraph.cisco.routers.router;whiteSpace=wrap;html=1;fillColor=#4CAF50;strokeColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="250" y="180" width="120" height="100" as="geometry"/>
+        </mxCell>
+        
+        <!-- WAN Link -->
+        <mxCell id="wan-link" value="" style="endArrow=none;html=1;rounded=0;" edge="1" parent="1" source="internet" target="router">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="150" y="240" as="sourcePoint"/>
+            <mxPoint x="250" y="240" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="wan-label" value="ether1 (WAN)" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="170" y="220" width="80" height="20" as="geometry"/>
+        </mxCell>
+        
+        <!-- LAN -->
+        <mxCell id="lan" value="LAN&#xa;192.168.88.0/24" style="shape=folder;whiteSpace=wrap;html=1;fillColor=#2196F3;strokeColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="450" y="150" width="120" height="80" as="geometry"/>
+        </mxCell>
+        <mxCell id="lan-link" value="" style="endArrow=none;html=1;rounded=0;" edge="1" parent="1" source="router" target="lan">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="370" y="230" as="sourcePoint"/>
+            <mxPoint x="450" y="190" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="lan-label" value="bridge-local&#xa;ether2-5, wlan1" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="380" y="200" width="70" height="40" as="geometry"/>
+        </mxCell>
+        
+        <!-- Devices -->
+        <mxCell id="devices" value="ПК, ноутбуки,&#xa;принтери" style="shape=mxgraph.basic.rectangle;whiteSpace=wrap;html=1;fillColor=#BBDEFB;" vertex="1" parent="1">
+          <mxGeometry x="600" y="170" width="100" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="dev-link" value="" style="endArrow=none;html=1;rounded=0;" edge="1" parent="1" source="lan" target="devices">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="570" y="190" as="sourcePoint"/>
+            <mxPoint x="600" y="200" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+        
+        <!-- Guest VLAN -->
+        <mxCell id="guest" value="Гостьова мережа&#xa;VLAN 10&#xa;192.168.10.0/24" style="shape=folder;whiteSpace=wrap;html=1;fillColor=#FF9800;strokeColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="450" y="280" width="120" height="80" as="geometry"/>
+        </mxCell>
+        <mxCell id="guest-link" value="" style="endArrow=none;html=1;rounded=0;" edge="1" parent="1" source="router" target="guest">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="370" y="250" as="sourcePoint"/>
+            <mxPoint x="450" y="320" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="guest-label" value="VLAN 10" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="390" y="270" width="60" height="20" as="geometry"/>
+        </mxCell>
+        
+        <!-- Guest Devices -->
+        <mxCell id="guest-dev" value="Гостьові&#xa;пристрої" style="shape=mxgraph.basic.rectangle;whiteSpace=wrap;html=1;fillColor=#FFE0B2;" vertex="1" parent="1">
+          <mxGeometry x="600" y="300" width="100" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="gdev-link" value="" style="endArrow=none;html=1;rounded=0;" edge="1" parent="1" source="guest" target="guest-dev">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="570" y="320" as="sourcePoint"/>
+            <mxPoint x="600" y="330" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+        
+        <!-- Title -->
+        <mxCell id="title" value="Топологія MikroTik" style="text;html=1;strokeColor=none;fillColor=none;align=center;fontSize=16;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="300" y="50" width="200" height="30" as="geometry"/>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
