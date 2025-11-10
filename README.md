@@ -1,18 +1,18 @@
 # MikroTik RouterOS — **Безпечний Гайд 2025**  
 **Повний посібник з налаштування для підлеглих та адміністраторів**  
 
-![GitHub last commit](https://img.shields.io/github/last-commit/M1rwana12/mikrotik-setup-guide?color=green&style=for-the-badge&logo=github)  
-![GitHub stars](https://img.shields.io/github/stars/M1rwana12/mikrotik-setup-guide?style=social&logo=github)  
-![GitHub license](https://img.shields.io/github/license/M1rwana12/mikrotik-setup-guide?color=blue&style=for-the-badge)  
-![RouterOS](https://img.shields.io/badge/RouterOS-v7.15+-blueviolet?style=for-the-badge&logo=mikrotik)  
-![Ukraine](https://img.shields.io/badge/Мова-Українська-FFD700?style=for-the-badge&logo=ukraine)
+[![Last Commit](https://img.shields.io/github/last-commit/M1rwana12/mikrotik-setup-guide?color=green&style=for-the-badge&logo=github)](https://github.com/M1rwana12/mikrotik-setup-guide/commits/main)  
+[![Stars](https://img.shields.io/github/stars/M1rwana12/mikrotik-setup-guide?style=social&logo=github)](https://github.com/M1rwana12/mikrotik-setup-guide/stargazers)  
+[![License](https://img.shields.io/github/license/M1rwana12/mikrotik-setup-guide?color=blue&style=for-the-badge)](LICENSE)  
+[![RouterOS](https://img.shields.io/badge/RouterOS-v7.15+-blueviolet?style=for-the-badge&logo=mikrotik)](https://mikrotik.com/download)  
+[![Мова](https://img.shields.io/badge/Мова-Українська-FFD700?style=for-the-badge&logo=ukraine)](README.md)
 
 <div align="center" style="margin: 30px 0;">
 
 <img src="https://github.com/M1rwana12.png" width="110" alt="M1rwana12" style="border-radius:50%; box-shadow: 0 6px 12px rgba(0,0,0,0.2); border: 3px solid #fff;">
 
 **Автор:** [@M1rwana12](https://github.com/M1rwana12)  
-**Оновлено:** 10 листопада 2025, 15:56 EET (UA)  
+**Оновлено:** 10 листопада 2025, 16:03 EET (UA)  
 **Пристрої:** CCR1036, RB760iGS, hEX, RB4011 та аналоги  
 
 </div>
@@ -259,54 +259,38 @@ mikrotik-setup-guide/
 | VLAN для гостьової мережі | `examples/guest-vlan.rsc` |
 | **Failover (2 провайдери)** | `scripts/06-failover.rsc` |
 | **Блокування РФ** | `scripts/07-block-ru.rsc` |
-| **Моніторинг трафіку (Graphing)** | `scripts/08-graphing.rsc` |
-| **Обмеження швидкості (Queue)** | [Див. нижче](#обмеження-швидкості-queue) |
+| **Моніторинг трафіку** | `scripts/08-graphing.rsc` |
+| **Обмеження швидкості** | [Див. нижче](#обмеження-швидкості-queue) |
 
 ---
 
 ## Обмеження швидкості (Queue)
 
-> **Приклад:** Обмежити одного користувача до **10 Мбіт/с (download/upload)**
-
 ```bash
-/queue tree
-add name="User-Limit" parent=global max-limit=10M/10M packet-mark=no-mark
-
-/ip firewall mangle
-add chain=prerouting src-address=192.168.88.100 action=mark-packet new-packet-mark=user-192.168.88.100 passthrough=yes
-
-/queue tree
-add name="192.168.88.100" parent="User-Limit" packet-mark=user-192.168.88.100 max-limit=10M/10M
+/queue tree add name="User-Limit" parent=global max-limit=10M/10M
+/ip firewall mangle add chain=prerouting src-address=192.168.88.100 action=mark-packet new-packet-mark=user-192.168.88.100
+/queue tree add name="192.168.88.100" parent="User-Limit" packet-mark=user-192.168.88.100 max-limit=10M/10M
 ```
-
-> **Готово!** Користувач `192.168.88.100` обмежений до **10 Мбіт/с**.
 
 ---
 
 ## Для адміністраторів
 
-### 1. Авто-бекап на email (щотижня)
+### Авто-бекап на email (щотижня)
 ```bash
-/system backup save name=auto-backup
-/tool e-mail send to=admin@company.ua subject="MikroTik Backup $([/system identity get name])" file=auto-backup.backup
-/system scheduler add name=weekly-backup interval=7d on-event="/system backup save name=auto-backup; /tool e-mail send to=admin@company.ua subject=\"Backup $([/system identity get name])\" file=auto-backup.backup"
+/system scheduler add name=weekly-backup interval=7d on-event="/system backup save name=auto-backup; /tool e-mail send to=admin@company.ua subject=\"MikroTik Backup\" file=auto-backup.backup"
 ```
 
-### 2. Моніторинг через SNMP
+### Моніторинг через SNMP
 ```bash
 /snmp set enabled=yes contact=admin@company.ua location="Офіс Київ"
 /snmp community set [find name=public] addresses=192.168.88.0/24
 ```
 
-### 3. Логування атак
+### Логування атак
 ```bash
 /system logging action add name=syslog remote-address=192.168.88.10 target=remote
 /system logging add topics=firewall action=syslog
-```
-
-### 4. Перевірка стану (щоденно)
-```bash
-/system scheduler add name=daily-check interval=1d on-event="/tool e-mail send to=admin@company.ua subject=\"Status: $([/system resource get uptime])\" body=\"CPU: $([/system resource get cpu-load])% | Free RAM: $([/system resource get free-memory])\""
 ```
 
 ---
@@ -325,3 +309,4 @@ add name="192.168.88.100" parent="User-Limit" packet-mark=user-192.168.88.100 ma
 
 **© 2025 M1rwana12. Вільне використання з посиланням.**  
 **Ліцензія:** [MIT](LICENSE)
+```
