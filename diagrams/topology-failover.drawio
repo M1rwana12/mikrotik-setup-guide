@@ -1,82 +1,104 @@
-<mxfile host="app.diagrams.net" modified="2025-11-10T14:24:00.000Z" agent="Grok AI" version="1.0" etag="abc123" type="device">
-  <diagram name="MikroTik Failover + BlackIP 2025" id="mikrotik-2025">
+<mxfile host="app.diagrams.net" modified="2025-11-10T16:45:00.000Z" agent="Grok AI" version="22.1.16" etag="mikrotik-failover-2025" type="device">
+  <diagram name="MikroTik Failover + BlackIP 2025" id="topology-failover">
     <mxGraphModel dx="1422" dy="794" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
       <root>
         <mxCell id="0"/>
         <mxCell id="1" parent="0"/>
 
-        <!-- INTERNET -->
-        <mxCell id="internet" value="&lt;div style=&quot;background:#e74c3c; color:white; padding:15px; border-radius:12px; font-weight:bold; text-align:center;&quot;&gt;ІНТЕРНЕТ&lt;/div&gt;" style="shape=cloud;whiteSpace=wrap;html=1;fillColor=#e74c3c;strokeColor=#c0392b;fontColor=#ffffff;fontStyle=1;" vertex="1" parent="1">
-          <mxGeometry x="480" y="40" width="200" height="100" as="geometry"/>
+        <!-- Title -->
+        <mxCell id="title" value="&lt;div style='font-size:24px; font-weight:bold; color:#1565c0; text-align:center;'&gt;MikroTik Topology — CCR + RB760iGS + Failover&lt;/div&gt;&lt;div style='font-size:12px; color:#666; text-align:center;'&gt;(EN) / Топологія — CCR + RB760iGS + Failover (UA)&lt;/div&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=20;fontFamily=Helvetica;" vertex="1" parent="1">
+          <mxGeometry x="50" y="10" width="900" height="50" as="geometry"/>
         </mxCell>
 
-        <!-- PROVIDER 1 -->
-        <mxCell id="isp1" value="&lt;div style=&quot;background:#3498db; color:white; padding:12px; border-radius:10px; font-weight:bold;&quot;&gt;ПРОВАЙДЕР 1&lt;br&gt;&lt;small&gt;DHCP / Static / PPPoE&lt;/small&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#3498db;strokeColor=#2980b9;fontColor=#ffffff;" vertex="1" parent="1">
-          <mxGeometry x="280" y="180" width="160" height="80" as="geometry"/>
+        <!-- Internet Cloud -->
+        <mxCell id="internet" value="&lt;div style='background:#e3f2fd; color:#1976d2; padding:15px; border-radius:20px; font-weight:bold; text-align:center;'&gt;INTERNET&lt;br&gt;&lt;small&gt;(ІНТЕРНЕТ)&lt;/small&gt;&lt;/div&gt;" style="shape=cloud;whiteSpace=wrap;html=1;fillColor=#e3f2fd;strokeColor=#1976d2;fontColor=#1976d2;fontStyle=1;fontSize=14;shadow=1;" vertex="1" parent="1">
+          <mxGeometry x="400" y="80" width="200" height="80" as="geometry"/>
         </mxCell>
 
-        <!-- PROVIDER 2 -->
-        <mxCell id="isp2" value="&lt;div style=&quot;background:#9b59b6; color:white; padding:12px; border-radius:10px; font-weight:bold;&quot;&gt;ПРОВАЙДЕР 2&lt;br&gt;&lt;small&gt;Резервний&lt;/small&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#9b59b6;strokeColor=#8e44ad;fontColor=#ffffff;" vertex="1" parent="1">
-          <mxGeometry x="520" y="180" width="160" height="80" as="geometry"/>
+        <!-- ISP 1 -->
+        <mxCell id="isp1" value="&lt;div style='background:#c8e6c9; color:#2e7d32; padding:12px; border-radius:15px; font-weight:bold; text-align:center;'&gt;ISP 1&lt;br&gt;&lt;small&gt;(ПРОВАЙДЕР 1)&lt;/small&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#c8e6c9;strokeColor=#4caf50;fontColor=#2e7d32;fontSize=12;shadow=1;" vertex="1" parent="1">
+          <mxGeometry x="150" y="200" width="120" height="70" as="geometry"/>
+        </mxCell>
+        <mxCell id="isp1-link" value="" style="endArrow=classic;html=1;strokeColor=#4caf50;strokeWidth=2;exitX=0.5;exitY=1;entryX=0.5;entryY=0;shadow=1;" edge="1" parent="1" source="internet" target="isp1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- ISP 2 -->
+        <mxCell id="isp2" value="&lt;div style='background:#ffcdd2; color:#c62828; padding:12px; border-radius:15px; font-weight:bold; text-align:center;'&gt;ISP 2 (Backup)&lt;br&gt;&lt;small&gt;(РЕЗЕРВНИЙ)&lt;/small&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffcdd2;strokeColor=#e57373;fontColor=#c62828;fontSize=12;shadow=1;" vertex="1" parent="1">
+          <mxGeometry x="700" y="200" width="120" height="70" as="geometry"/>
+        </mxCell>
+        <mxCell id="isp2-link" value="" style="endArrow=classic;html=1;strokeColor=#e57373;strokeWidth=2;dashed=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;shadow=1;" edge="1" parent="1" source="internet" target="isp2">
+          <mxGeometry relative="1" as="geometry"/>
         </mxCell>
 
         <!-- CCR1036 -->
-        <mxCell id="ccr" value="&lt;div style=&quot;background:#2c3e50; color:#1abc9c; padding:15px; border-radius:15px; font-weight:bold; border:3px solid #1abc9c;&quot;&gt;CCR1036&lt;br&gt;&lt;small&gt;Failover | NAT | Firewall | Scheduler&lt;/small&gt;&lt;/div&gt;" style="shape=mxgraph.basic.rect;whiteSpace=wrap;html=1;fillColor=#2c3e50;strokeColor=#1abc9c;fontColor=#1abc9c;fontStyle=1;" vertex="1" parent="1">
-          <mxGeometry x="380" y="320" width="200" height="100" as="geometry"/>
+        <mxCell id="ccr" value="&lt;div style='background:#fff3e0; color:#ef6c00; padding:15px; border-radius:15px; font-weight:bold; text-align:center; border:2px solid #ff9800;'&gt;CCR1036&lt;br&gt;&lt;small&gt;Failover | NAT | Firewall | Scheduler&lt;br&gt;(Фейловер | NAT | Фаєрвол | Планувальник)&lt;/small&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff3e6;strokeColor=#ff9800;fontColor=#ef6c00;fontSize=12;shadow=1;" vertex="1" parent="1">
+          <mxGeometry x="300" y="320" width="200" height="100" as="geometry"/>
+        </mxCell>
+        <mxCell id="ccr-isp1" value="WAN1" style="endArrow=none;html=1;strokeColor=#4caf50;strokeWidth=3;exitX=0;exitY=0;entryX=0;entryY=1;shadow=1;fontSize=11;" edge="1" parent="1" source="isp1" target="ccr">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="ccr-isp2" value="WAN2 (backup)" style="endArrow=none;html=1;strokeColor=#e57373;strokeWidth=3;dashed=1;exitX=1;exitY=0;entryX=1;entryY=1;shadow=1;fontSize=11;" edge="1" parent="1" source="isp2" target="ccr">
+          <mxGeometry relative="1" as="geometry"/>
         </mxCell>
 
         <!-- RB760iGS -->
-        <mxCell id="rb" value="&lt;div style=&quot;background:#34495e; color:#f39c12; padding:12px; border-radius:12px; font-weight:bold; border:2px solid #f39c12;&quot;&gt;RB760iGS&lt;br&gt;&lt;small&gt;PoE | SFP | VLAN | Graphing&lt;/small&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#34495e;strokeColor=#f39c12;fontColor=#f39c12;" vertex="1" parent="1">
-          <mxGeometry x="680" y="320" width="180" height="90" as="geometry"/>
+        <mxCell id="rb760" value="&lt;div style='background:#e0f2f1; color:#00796b; padding:12px; border-radius:15px; font-weight:bold; text-align:center; border:2px solid #009688;'&gt;RB760iGS&lt;br&gt;&lt;small&gt;PoE | SFP | VLAN | Graphing&lt;br&gt;(PoE | SFP | VLAN | Графіки)&lt;/small&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e0f2f1;strokeColor=#009688;fontColor=#00796b;fontSize=12;shadow=1;" vertex="1" parent="1">
+          <mxGeometry x="600" y="320" width="180" height="100" as="geometry"/>
+        </mxCell>
+        <mxCell id="rb760-link" value="SFP / LACP" style="endArrow=none;html=1;strokeColor=#009688;strokeWidth=2;dashed=1;shadow=1;fontSize=11;" edge="1" parent="1" source="ccr" target="rb760">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="500" y="380" as="sourcePoint"/>
+            <mxPoint x="600" y="380" as="targetPoint"/>
+          </mxGeometry>
         </mxCell>
 
-        <!-- LAN -->
-        <mxCell id="lan" value="&lt;div style=&quot;background:#27ae60; color:white; padding:15px; border-radius:12px; font-weight:bold;&quot;&gt;LAN&lt;br&gt;192.168.88.0/24&lt;/div&gt;" style="ellipse;whiteSpace=wrap;html=1;fillColor=#27ae60;strokeColor=#229954;fontColor=#ffffff;" vertex="1" parent="1">
-          <mxGeometry x="460" y="500" width="160" height="100" as="geometry"/>
+        <!-- LAN Bridge -->
+        <mxCell id="lan" value="&lt;div style='background:#e8f5e8; color:#2e7d32; padding:15px; border-radius:15px; font-weight:bold; text-align:center;'&gt;LAN Bridge&lt;br&gt;&lt;small&gt;192.168.88.0/24 (LAN Міст)&lt;/small&gt;&lt;/div&gt;" style="ellipse;whiteSpace=wrap;html=1;fillColor=#e8f5e8;strokeColor=#4caf50;fontColor=#2e7d32;fontSize=12;shadow=1;" vertex="1" parent="1">
+          <mxGeometry x="400" y="480" width="160" height="90" as="geometry"/>
         </mxCell>
-
-        <!-- BLACKIP -->
-        <mxCell id="blackip" value="&lt;div style=&quot;background:#c0392b; color:white; padding:10px; border-radius:10px; font-size:10px;&quot;&gt;BlackIP List&lt;br&gt;~45k IP (malware/spam)&lt;br&gt;Автооновлення щотижня&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#c0392b;strokeColor=#a93226;fontColor=#ffffff;fontSize=10;" vertex="1" parent="1">
-          <mxGeometry x="100" y="340" width="140" height="70" as="geometry"/>
-        </mxCell>
-
-        <!-- GRAPHING -->
-        <mxCell id="graph" value="&lt;div style=&quot;background:#16a085; color:white; padding:8px; border-radius:8px; font-size:9px;&quot;&gt;Graphing&lt;br&gt;Моніторинг трафіку&lt;/div&gt;" style="ellipse;whiteSpace=wrap;html=1;fillColor=#16a085;strokeColor=#138d75;fontColor=#ffffff;fontSize=9;" vertex="1" parent="1">
-          <mxGeometry x="880" y="360" width="100" height="50" as="geometry"/>
-        </mxCell>
-
-        <!-- CONNECTIONS -->
-        <mxCell id="c1" value="" style="endArrow=none;html=1;strokeColor=#7f8c8d;strokeWidth=3;" edge="1" source="internet" target="isp1" parent="1">
-          <mxGeometry relative="1" as="geometry"/>
-        </mxCell>
-        <mxCell id="c2" value="" style="endArrow=none;html=1;strokeColor=#7f8c8d;strokeWidth=3;" edge="1" source="internet" target="isp2" parent="1">
-          <mxGeometry relative="1" as="geometry"/>
-        </mxCell>
-        <mxCell id="c3" value="WAN1" style="endArrow=classic;html=1;strokeColor=#3498db;strokeWidth=2;labelBackgroundColor=#ffffff;" edge="1" source="isp1" target="ccr" parent="1">
-          <mxGeometry relative="1" as="geometry"/>
-        </mxCell>
-        <mxCell id="c4" value="WAN2 (резерв)" style="endArrow=classic;html=1;strokeColor=#9b59b6;strokeWidth=2;dashed=1;labelBackgroundColor=#ffffff;" edge="1" source="isp2" target="ccr" parent="1">
-          <mxGeometry relative="1" as="geometry"/>
-        </mxCell>
-        <mxCell id="c5" value="LAN Bridge" style="endArrow=none;html=1;strokeColor=#27ae60;strokeWidth=3;" edge="1" source="ccr" target="lan" parent="1">
-          <mxGeometry relative="1" as="geometry"/>
-        </mxCell>
-        <mxCell id="c6" value="SFP / PoE" style="endArrow=classic;html=1;strokeColor=#f39c12;strokeWidth=2;" edge="1" source="ccr" target="rb" parent="1">
-          <mxGeometry relative="1" as="geometry"/>
-        </mxCell>
-        <mxCell id="c7" value="VLAN / Graphing" style="endArrow=none;html=1;strokeColor=#f39c12;strokeWidth=2;" edge="1" source="rb" target="lan" parent="1">
-          <mxGeometry relative="1" as="geometry"/>
-        </mxCell>
-        <mxCell id="c8" value="BlackIP Update" style="endArrow=block;html=1;strokeColor=#c0392b;strokeWidth=2;dashed=1;labelBackgroundColor=#ffffff;" edge="1" source="blackip" target="ccr" parent="1">
-          <mxGeometry relative="1" as="geometry"/>
-        </mxCell>
-        <mxCell id="c9" value="" style="endArrow=none;html=1;strokeColor=#16a085;strokeWidth=2;" edge="1" source="rb" target="graph" parent="1">
+        <mxCell id="lan-link" value="LAN Bridge" style="endArrow=none;html=1;strokeColor=#4caf50;strokeWidth=3;shadow=1;fontSize=11;" edge="1" parent="1" source="ccr" target="lan">
           <mxGeometry relative="1" as="geometry"/>
         </mxCell>
 
-        <!-- LEGEND -->
-        <mxCell id="legend" value="&lt;div style=&quot;font-size:10px; color:#7f8c8d;&quot;&gt;&lt;b&gt;Легенда:&lt;/b&gt;&lt;br&gt;— Основний шлях&lt;br&gt;- - - Резервний&lt;br&gt;→ BlackIP оновлення&lt;/div&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;" vertex="1" parent="1">
-          <mxGeometry x="50" y="500" width="150" height="80" as="geometry"/>
+        <!-- VLAN 10 Guest -->
+        <mxCell id="vlan" value="&lt;div style='background:#f3e5f5; color:#7b1fa2; padding:12px; border-radius:15px; font-weight:bold; text-align:center;'&gt;VLAN 10 Guest&lt;br&gt;&lt;small&gt;192.168.10.0/24 (Гостьова)&lt;/small&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f3e5f5;strokeColor=#9c27b0;fontColor=#7b1fa2;fontSize=12;shadow=1;" vertex="1" parent="1">
+          <mxGeometry x="650" y="480" width="140" height="90" as="geometry"/>
+        </mxCell>
+        <mxCell id="vlan-link" value="VLAN 10" style="endArrow=none;html=1;strokeColor=#9c27b0;strokeWidth=2;dashed=1;shadow=1;fontSize=11;" edge="1" parent="1" source="rb760" target="vlan">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- BlackIP Block -->
+        <mxCell id="blackip" value="&lt;div style='background:#ffebee; color:#c62828; padding:10px; border-radius:10px; font-size:11px; text-align:center;'&gt;BlackIP List&lt;br&gt;&lt;small&gt;~45k IPs (malware/spam)&lt;br&gt;Auto-update weekly (Автооновлення)&lt;/small&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffebee;strokeColor=#e57373;fontColor=#c62828;fontSize=11;shadow=1;" vertex="1" parent="1">
+          <mxGeometry x="50" y="340" width="120" height="80" as="geometry"/>
+        </mxCell>
+        <mxCell id="blackip-link" value="BlackIP Update" style="endArrow=block;html=1;strokeColor=#c62828;strokeWidth=3;dashed=1;shadow=1;fontSize=11;" edge="1" parent="1" source="blackip" target="ccr">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="170" y="380" as="sourcePoint"/>
+            <mxPoint x="300" y="380" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Graphing -->
+        <mxCell id="graph" value="&lt;div style='background:#e8f5e8; color:#2e7d32; padding:8px; border-radius:8px; font-size:10px; text-align:center;'&gt;Graphing&lt;br&gt;&lt;small&gt;Traffic Monitoring (Моніторинг трафіку)&lt;/small&gt;&lt;/div&gt;" style="ellipse;whiteSpace=wrap;html=1;fillColor=#e8f5e8;strokeColor=#4caf50;fontColor=#2e7d32;fontSize=10;shadow=1;" vertex="1" parent="1">
+          <mxGeometry x="850" y="380" width="100" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="graph-link" value="Graphing" style="endArrow=none;html=1;strokeColor=#4caf50;strokeWidth=2;shadow=1;fontSize=11;" edge="1" parent="1" source="rb760" target="graph">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="800" y="380" as="sourcePoint"/>
+            <mxPoint x="850" y="380" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Legend -->
+        <mxCell id="legend" value="&lt;div style='font-size:11px; color:#7f8c8d; text-align:left;'&gt;&lt;b&gt;Legend / Легенда:&lt;/b&gt;&lt;br&gt;&lt;span style='color:#4caf50'&gt;—&lt;/span&gt; Primary path / Основний шлях&lt;br&gt;&lt;span style='color:#e57373'&gt;- - -&lt;/span&gt; Backup path / Резервний шлях&lt;br&gt;&lt;span style='color:#c62828'&gt;→&lt;/span&gt; BlackIP update / Оновлення BlackIP&lt;/div&gt;" style="text;html=1;align=left;verticalAlign=top;whiteSpace=wrap;rounded=1;fontSize=11;fontColor=#7f8c8d;" vertex="1" parent="1">
+          <mxGeometry x="50" y="500" width="200" height="100" as="geometry"/>
+        </mxCell>
+
+        <!-- Authorship -->
+        <mxCell id="author" value="&lt;div style='background:#f1c40f; color:#2c3e50; padding:10px; border-radius:12px; font-weight:bold; text-align:center; font-size:12px;'&gt;© 2025 @M1rwana12&lt;br&gt;&lt;small&gt;Telegram: @imSenya&lt;/small&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f1c40f;strokeColor=#f39c12;fontColor=#2c3e50;fontStyle=1;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="350" y="650" width="300" height="50" as="geometry"/>
         </mxCell>
 
       </root>
