@@ -297,7 +297,7 @@ mikrotik-setup-guide/
 
 <div align="center" style="margin: 50px 0; padding: 25px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 20px; color: white; box-shadow: 0 10px 20px rgba(0,0,0,0.2);">
 
-<h2>Твій гайд — №1 в Україні 2025</h2>
+<h2>Гайд №1</h2>
 <p><strong>Готовий до розгортання на CCR, RB760iGS та будь-якому сучасному MikroTik.</strong></p>
 
 **Зірочка (star) — мотивація для оновлень!**  
@@ -309,4 +309,3 @@ mikrotik-setup-guide/
 
 **© 2025 M1rwana12. Вільне використання з посиланням.**  
 **Ліцензія:** [MIT](LICENSE)
-```
