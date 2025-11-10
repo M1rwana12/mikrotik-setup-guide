@@ -301,7 +301,7 @@ mikrotik-setup-guide/
 <p><strong>Готовий до розгортання на CCR, RB760iGS та будь-якому сучасному MikroTik.</strong></p>
 
 **Зірочка (star) — мотивація для оновлень!**  
-**Питання? Пишіть у [Issues](https://github.com/M1rwana12/mikrotik-setup-guide/issues) або Telegram: [@M1rwana12](https://t.me/M1rwana12)**
+**Питання? Пишіть у [Issues](https://github.com/M1rwana12/mikrotik-setup-guide/issues) або Telegram: [@M1rwana12](https://t.me/imSenya)**
 
 </div>
 
