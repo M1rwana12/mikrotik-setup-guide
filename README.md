@@ -1,30 +1,44 @@
-<<<<<<< HEAD
-# Посібник з Налаштування MikroTik (RouterOS) — КІБЕРБЕЗПЕКА ПЕРШ ЗА ВСЕ  
-**Репозиторій:** [github.com/M1rwana12/mikrotik-setup-guide](https://github.com/M1rwana12/mikrotik-setup-guide)  
+# MikroTik RouterOS — **Безпечний Гайд 2025**  
+**Повний посібник з налаштування для підлеглих та адміністраторів**  
+
+![GitHub last commit](https://img.shields.io/github/last-commit/M1rwana12/mikrotik-setup-guide?color=green&style=for-the-badge&logo=github)  
+![GitHub stars](https://img.shields.io/github/stars/M1rwana12/mikrotik-setup-guide?style=social&logo=github)  
+![GitHub license](https://img.shields.io/github/license/M1rwana12/mikrotik-setup-guide?color=blue&style=for-the-badge)  
+![RouterOS](https://img.shields.io/badge/RouterOS-v7.15+-blueviolet?style=for-the-badge&logo=mikrotik)  
+![Ukraine](https://img.shields.io/badge/Мова-Українська-FFD700?style=for-the-badge&logo=ukraine)
+
+<div align="center" style="margin: 30px 0;">
+
+<img src="https://github.com/M1rwana12.png" width="110" alt="M1rwana12" style="border-radius:50%; box-shadow: 0 6px 12px rgba(0,0,0,0.2); border: 3px solid #fff;">
+
 **Автор:** [@M1rwana12](https://github.com/M1rwana12)  
-**Мова:** Українська  
-**Оновлено:** 10 листопада 2025, 13:08 EET (UA)  
+**Оновлено:** 10 листопада 2025, 15:56 EET (UA)  
+**Пристрої:** CCR1036, RB760iGS, hEX, RB4011 та аналоги  
+
+</div>
 
 ---
 
-> **Для підлеглих, ІТ-фахівців, системних адміністраторів**  
-> **Повний, безпечний, готовий до розгортання гайд** — від підключення до фаєрволу.  
-> **Кожна команда + пояснення + кібербезпека**.  
-> Готово до копіювання у **WinBox → Terminal**.
+> **Готовий до розгортання • Безпечний • Зрозумілий**  
+> Від підключення до провайдера → до **жорсткого фаєрволу**  
+> **Кожна команда + пояснення + кібербезпека**  
+> Готово до копіювання у **WinBox → Terminal**
 
 ---
 
 ## Зміст
-- [УВАГА: Wi-Fi — ВИМКНУТИ!](#увага-wi-fi)
+- [Wi-Fi — ВИМКНУТИ!](#увага-wi-fi)
 - [Початкове Налаштування](#початкове-налаштування)
 - [LAN: Міст + IP + DHCP](#lan-мережа)
-- [WAN: Інтернет (DHCP, Static, PPPoE)](#wan-інтернет)
+- [WAN: DHCP / Static / PPPoE](#wan-інтернет)
 - [NAT](#nat)
 - [Фаєрвол: Повний захист](#фаєрвол)
-- [КІБЕРБЕЗПЕКА: Жорсткі правила](#кібербезпека)
+- [КІБЕРБЕЗПЕКА](#кібербезпека)
 - [Топологія мережі](#топологія-мережі)
-- [Структура Репозиторію](#структура-репозиторію)
+- [Структура репозиторію](#структура-репозиторію)
 - [Як використовувати скрипти](#як-використовувати-скрипти)
+- [Додаткові можливості](#додаткові-можливості)
+- [Для адміністраторів](#для-адміністраторів)
 
 ---
 
@@ -181,10 +195,22 @@ set winbox address=192.168.88.0/24
 
 ## Топологія мережі
 
-![Топологія мережі](diagrams/digrams.drawio.png)
+<div align="center">
 
-> **Редагуйте деталі:** [diagrams/topology.drawio](./diagrams/topology.drawio)  
+![Топологія мережі — CCR + RB760iGS + Failover](diagrams/topology-failover.drawio.png)
+
+> **Детальна діаграма:**  
+> - **CCR1036** — основний роутер (Failover, Firewall, NAT)  
+> - **RB760iGS** — допоміжний (SFP, PoE, VLAN)  
+> - 2 провайдери (основний + резерв)  
+> - Блокування РФ (~45k IP, автооновлення)  
+> - Graphing (трафік на графіках)  
+> - VLAN 10 (гостьова мережа)  
+>  
+> **Редагуйте:** [diagrams/topology-failover.drawio](./diagrams/topology-failover.drawio)  
 > Відкрийте в [app.diagrams.net](https://app.diagrams.net)
+
+</div>
 
 ---
 
@@ -194,6 +220,7 @@ set winbox address=192.168.88.0/24
 mikrotik-setup-guide/
 │
 ├── README.md
+├── LICENSE
 ├── scripts/
 │   ├── 01-lan.rsc
 │   ├── 02-wan-dhcp.rsc
@@ -201,12 +228,15 @@ mikrotik-setup-guide/
 │   ├── 02-wan-pppoe.rsc
 │   ├── 03-nat.rsc
 │   ├── 04-firewall-full.rsc
-│   └── 05-security.rsc
+│   ├── 05-security.rsc
+│   ├── 06-failover.rsc          ← 2 провайдери
+│   ├── 07-block-ru.rsc          ← Блок РФ
+│   └── 08-graphing.rsc          ← Графіки
 ├── diagrams/
-│   ├── digrams.drawio.png     ← PNG-версія
-│   └── topology.drawio        ← Редактор
+│   ├── topology-failover.drawio
+│   └── topology-failover.drawio.png
 └── examples/
-    └── guest-vlan.rsc         ← Гостьова мережа
+    └── guest-vlan.rsc           ← Гостьова мережа
 ```
 
 ---
@@ -217,280 +247,81 @@ mikrotik-setup-guide/
 2. WinBox → **Files** → перетягніть  
 3. Terminal:  
 ```bash
-/import file=04-firewall-full.rsc
+/import file=01-lan.rsc
 ```
 
 ---
 
-**© 2025 M1rwana12. Вільне використання з посиланням на репозиторій.**  
-**Зірочка (star) — мотивація для оновлень!**
-```
-=======
-# Посібник з Налаштування MikroTik (RouterOS)  
-**Репозиторій:** [github.com/M1rwana12/mikrotik-setup-guide](https://github.com/M1rwana12/mikrotik-setup-guide)  
-**Автор:** [@M1rwana12](https://github.com/M1rwana12)  
-**Мова:** Українська  
-**Оновлено:** 10 листопада 2025  
+## Додаткові можливості
+
+| Функція | Файл |
+|--------|------|
+| VLAN для гостьової мережі | `examples/guest-vlan.rsc` |
+| **Failover (2 провайдери)** | `scripts/06-failover.rsc` |
+| **Блокування РФ** | `scripts/07-block-ru.rsc` |
+| **Моніторинг трафіку (Graphing)** | `scripts/08-graphing.rsc` |
+| **Обмеження швидкості (Queue)** | [Див. нижче](#обмеження-швидкості-queue) |
 
 ---
 
-> **Для початківців та підлеглих** — покроковий гайд від підключення до провайдера до потужного фаєрволу.  
-> Кожна команда терміналу + **пояснення українською**.  
-> Готово до копіювання у WinBox → Terminal.  
+## Обмеження швидкості (Queue)
 
----
-
-## Зміст
-- [Початкове Налаштування](#початкове-налаштування)
-- [Скидання Конфігурації](#скидання-конфігурації)
-- [LAN: Міст + IP + DHCP](#lan-мережа)
-- [WAN: Інтернет від провайдера](#wan-інтернет)
-- [NAT: Доступ до інтернету](#nat)
-- [Фаєрвол: Базовий + Розширений захист](#фаєрвол)
-- [Безпека: Сервіси, оновлення, доступ](#безпека)
-- [Усунення Проблем](#усунення-проблем)
-- [Структура Репозиторію](#структура-репозиторію)
-
----
-
-## Початкове Налаштування
-
-### Підключення
-1. **Кабель провайдера → `ether1`** (WAN)  
-2. **Ваш ПК → `ether2`** (LAN)  
-3. Увімкніть роутер
-
-### Доступ через WinBox
-1. Завантажте [WinBox](https://mikrotik.com/download)  
-2. Відкрийте → вкладка **Neighbors**  
-3. Знайдіть роутер за MAC-адресою → **Connect**  
-4. Логін: `admin` | Пароль: *(порожній)*
+> **Приклад:** Обмежити одного користувача до **10 Мбіт/с (download/upload)**
 
 ```bash
-/user set admin password=ТвійСильнийПароль123!
+/queue tree
+add name="User-Limit" parent=global max-limit=10M/10M packet-mark=no-mark
+
+/ip firewall mangle
+add chain=prerouting src-address=192.168.88.100 action=mark-packet new-packet-mark=user-192.168.88.100 passthrough=yes
+
+/queue tree
+add name="192.168.88.100" parent="User-Limit" packet-mark=user-192.168.88.100 max-limit=10M/10M
 ```
-> **Пояснення**: Змінює пароль за замовчуванням. Використовуйте 12+ символів (великі, малі, цифри, символи).
+
+> **Готово!** Користувач `192.168.88.100` обмежений до **10 Мбіт/с**.
 
 ---
 
-## Скидання Конфігурації
+## Для адміністраторів
 
+### 1. Авто-бекап на email (щотижня)
 ```bash
-/system reset-configuration no-defaults=yes skip-backup=yes
-```
-> **Пояснення**: Повне скидання до "чистого аркуша". Після перезавантаження підключайтесь через MAC.  
-> **Увага**: Втрачаються всі налаштування!
-
----
-
-## LAN Мережа
-
-### 1. Створення мосту
-```bash
-/interface bridge add name=bridge-local comment="Локальна мережа"
+/system backup save name=auto-backup
+/tool e-mail send to=admin@company.ua subject="MikroTik Backup $([/system identity get name])" file=auto-backup.backup
+/system scheduler add name=weekly-backup interval=7d on-event="/system backup save name=auto-backup; /tool e-mail send to=admin@company.ua subject=\"Backup $([/system identity get name])\" file=auto-backup.backup"
 ```
 
-### 2. Додавання портів
+### 2. Моніторинг через SNMP
 ```bash
-/interface bridge port add bridge=bridge-local interface=ether2
-/interface bridge port add bridge=bridge-local interface=ether3
-/interface bridge port add bridge=bridge-local interface=ether4
-/interface bridge port add bridge=bridge-local interface=ether5
-```
-> Додайте `wlan1`, якщо використовуєте Wi-Fi.
-
-### 3. IP-адреса мосту
-```bash
-/ip address add address=192.168.88.1/24 interface=bridge-local comment="LAN IP"
+/snmp set enabled=yes contact=admin@company.ua location="Офіс Київ"
+/snmp community set [find name=public] addresses=192.168.88.0/24
 ```
 
-### 4. DHCP-сервер (автоматична видача IP)
+### 3. Логування атак
 ```bash
-/ip dhcp-server setup
+/system logging action add name=syslog remote-address=192.168.88.10 target=remote
+/system logging add topics=firewall action=syslog
 ```
-> Відповідайте:  
-> - `bridge-local`  
-> - `192.168.88.0/24`  
-> - `192.168.88.1`  
-> - `192.168.88.2-192.168.88.254`  
-> - `8.8.8.8,8.8.4.4`  
-> - `1d`
 
-**Або вручну:**
+### 4. Перевірка стану (щоденно)
 ```bash
-/ip pool add name=lan-pool ranges=192.168.88.2-192.168.88.254
-/ip dhcp-server add interface=bridge-local address-pool=lan-pool name=dhcp-lan
-/ip dhcp-server network add address=192.168.88.0/24 gateway=192.168.88.1 dns-server=8.8.8.8,8.8.4.4
+/system scheduler add name=daily-check interval=1d on-event="/tool e-mail send to=admin@company.ua subject=\"Status: $([/system resource get uptime])\" body=\"CPU: $([/system resource get cpu-load])% | Free RAM: $([/system resource get free-memory])\""
 ```
 
 ---
 
-## WAN: Інтернет
+<div align="center" style="margin: 50px 0; padding: 25px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 20px; color: white; box-shadow: 0 10px 20px rgba(0,0,0,0.2);">
 
-### Списки інтерфейсів
-```bash
-/interface list add name=WAN
-/interface list add name=LAN
-/interface list member add list=WAN interface=ether1
-/interface list member add list=LAN interface=bridge-local
-```
+<h2>Твій гайд — №1 в Україні 2025</h2>
+<p><strong>Готовий до розгортання на CCR, RB760iGS та будь-якому сучасному MikroTik.</strong></p>
 
----
+**Зірочка (star) — мотивація для оновлень!**  
+**Питання? Пишіть у [Issues](https://github.com/M1rwana12/mikrotik-setup-guide/issues) або Telegram: [@M1rwana12](https://t.me/M1rwana12)**
 
-### Варіант 1: DHCP від провайдера (найпоширеніший)
-```bash
-/ip dhcp-client add interface=ether1 disabled=no add-default-route=yes use-peer-dns=yes
-```
-> Перевірка: `/ip dhcp-client print` → статус `bound`
+</div>
 
 ---
 
-### Варіант 2: Статичний IP
-```bash
-/ip address add address=203.0.113.50/24 interface=ether1
-/ip route add dst-address=0.0.0.0/0 gateway=203.0.113.1
-/ip dns set servers=8.8.8.8,8.8.4.4
-```
-
----
-
-### Варіант 3: PPPoE
-```bash
-/interface pppoe-client add interface=ether1 user=ваш_логін password=ваш_пароль \
-  add-default-route=yes use-peer-dns=yes disabled=no
-```
-> Інтерфейс буде `pppoe-out1` — використовуйте його в NAT та фаєрволі.
-
----
-
-### Тест інтернету
-```bash
-/ping 8.8.8.8 count=5
-```
-
----
-
-## NAT
-
-```bash
-/ip firewall nat add chain=srcnat out-interface-list=WAN action=masquerade comment="Інтернет для LAN"
-```
-> Замініть `out-interface-list=WAN` на `out-interface=pppoe-out1`, якщо PPPoE.
-
----
-
-## Фаєрвол (Базовий + Розширений)
-
-### Input (захист роутера)
-```bash
-/ip firewall filter
-add chain=input action=accept connection-state=established,related,untracked comment="Встановлені з'єднання"
-add chain=input action=drop connection-state=invalid comment="Відкинути невалідні"
-add chain=input action=accept protocol=icmp comment="Дозволити ping"
-add chain=input action=accept in-interface-list=LAN comment="Дозволити з LAN"
-add chain=input action=drop in-interface-list=!LAN comment="Блокувати все з WAN"
-add chain=input action=drop protocol=tcp dst-port=80,443 in-interface-list=WAN comment="Блок веб ззовні"
-add chain=input action=drop protocol=udp dst-port=53 in-interface-list=WAN comment="Блок DNS ззовні"
-add chain=input action=accept protocol=tcp dst-port=22 in-interface-list=LAN limit=3,5 comment="SSH з LAN (обмеження)"
-add chain=input action=drop protocol=tcp dst-port=22 comment="Блок SSH brute-force"
-```
-
----
-
-### Forward (захист LAN)
-```bash
-add chain=forward action=fasttrack-connection connection-state=established,related comment="Прискорення"
-add chain=forward action=accept connection-state=established,related,untracked comment="Встановлені"
-add chain=forward action=drop connection-state=invalid comment="Відкинути невалідні"
-add chain=forward action=accept in-interface-list=LAN out-interface-list=WAN comment="LAN → Інтернет"
-add chain=forward action=drop in-interface-list=!LAN comment="Блок з WAN → LAN"
-add chain=forward action=drop src-address=192.168.0.0/16 comment="Анти-спуфінг (приватні)"
-add chain=forward action=drop src-address=10.0.0.0/8 comment="Анти-спуфінг"
-add chain=forward action=drop src-address=172.16.0.0/12 comment="Анти-спуфінг"
-add chain=forward action=drop protocol=tcp connection-nat-state=!dstnat connection-state=new comment="Блок нових без NAT"
-add chain=forward action=drop protocol=tcp flags=syn connection-limit=50,32 comment="Проти SYN-flood"
-add chain=forward action=drop protocol=icmp icmp-options=8:0 limit=1,5 comment="Обмежити ping"
-add chain=forward action=drop dst-port=0-1023 protocol=tcp in-interface-list=WAN comment="Блок низьких портів"
-add chain=forward action=drop protocol=udp dst-port=5060-5061 comment="Блок SIP (якщо не VoIP)"
-```
-
----
-
-## Безпека
-
-### Вимкнення небезпечних сервісів
-```bash
-/ip service disable telnet,ftp,www,api
-  set ssh address=192.168.88.0/24
-  set winbox address=192.168.88.0/24
-```
-
-### Приховати від сканування
-```bash
-/ip neighbor discovery-settings set discover-interface-list=LAN
-/tool mac-server set allowed-interface-list=LAN
-/tool mac-server mac-winbox set allowed-interface-list=LAN
-```
-
-### Оновлення
-```bash
-/system package update check-for-updates
-/system package update install
-/system reboot
-```
-
----
-
-## Усунення Проблем
-
-| Проблема | Команда |
-|--------|--------|
-| Немає інтернету | `/ip dhcp-client print` |
-| Не бачить роутер | WinBox → Neighbors |
-| Помилки | `/log print` |
-| Зберегти конфіг | `/export hide-sensitive file=config.rsc` |
-
----
-
-## Структура Репозиторію
-
-```
-mikrotik-setup-guide/
-│
-├── README.md                  ← Цей файл
-├── scripts/
-│   ├── 01-lan.rsc
-│   ├── 02-wan-dhcp.rsc
-│   ├── 03-nat.rsc
-│   ├── 04-firewall-full.rsc
-│   └── 05-security.rsc
-├── diagrams/
-│   └── topology.png
-└── examples/
-    └── guest-vlan.rsc
-```
-
-> **Як використовувати скрипти**:  
-> 1. Завантажте `.rsc`  
-> 2. У WinBox: `Files` → перетягніть файл  
-> 3. Terminal: `/import file=04-firewall-full.rsc`
-
----
-
-## Додаткові Ідеї (Pull Request Welcome!)
-
-- [ ] Додати **VLAN для гостьової мережі**  
-- [ ] **Queue** — обмеження швидкості по IP  
-- [ ] **CAPsMAN** — централізоване Wi-Fi  
-- [ ] **Auto-backup на email**  
-- [ ] **Моніторинг через The Dude**
-
----
-
-> **Питання? Пишіть у Issues або Telegram: @M1rwana12**  
-> **Зірочка (⭐) — мотивація для оновлень!**
-
----
-
-**© 2025 M1rwana12. Вільне використання з посиланням на репозиторій.**
->>>>>>> 960141bdde5d6c5a97e4785cfaa7cebf15e5fb2d
+**© 2025 M1rwana12. Вільне використання з посиланням.**  
+**Ліцензія:** [MIT](LICENSE)

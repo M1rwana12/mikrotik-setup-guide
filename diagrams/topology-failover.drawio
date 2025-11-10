@@ -1,0 +1,108 @@
+<mxfile host="app.diagrams.net" modified="2025-11-10T15:45:00.000Z" agent="Grok" type="device">
+  <diagram name="MikroTik Топологія — CCR + RB760iGS + Failover" id="mikrotik-topology-v2">
+    <mxGraphModel dx="1422" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="1">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+
+        <!-- === ЗАГОЛОВОК === -->
+        <mxCell id="title" value="&lt;h2 style=&quot;margin:0;color:#1565c0;&quot;&gt;MikroTik Топологія — CCR + RB760iGS&lt;/h2&gt;&lt;p style=&quot;margin:5px 0 0;font-size:12px;color:#555;&quot;&gt;Failover • Блок РФ • VLAN • Graphing&lt;/p&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;fontSize=16;fontStyle=1;fontFamily=Helvetica;" vertex="1" parent="1">
+          <mxGeometry x="380" y="30" width="400" height="60" as="geometry"/>
+        </mxCell>
+
+        <!-- === ІНТЕРНЕТ === -->
+        <mxCell id="internet" value="&lt;b&gt;Інтернет&lt;/b&gt;&#xa;&lt;i&gt;ISP 1 + ISP 2&lt;/i&gt;" style="shape=cloud;whiteSpace=wrap;html=1;fillColor=#e3f2fd;strokeColor=#1976d2;fontFamily=Helvetica;fontSize=13;fontStyle=1;shadow=1;" vertex="1" parent="1">
+          <mxGeometry x="100" y="120" width="160" height="100" as="geometry"/>
+        </mxCell>
+
+        <!-- === ПРОВАЙДЕР 1 (ОСНОВНИЙ) === -->
+        <mxCell id="isp1" value="&lt;b style=&quot;color:#1b5e20;&quot;&gt;Провайдер 1&lt;/b&gt;&#xa;ether1 • 1.1.1.1&#xa;&lt;i&gt;Основний&lt;/i&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#c8e6c9;strokeColor=#4caf50;fontFamily=Helvetica;fontSize=12;shadow=1;gradientColor=#a5d6a7;" vertex="1" parent="1">
+          <mxGeometry x="300" y="100" width="130" height="90" as="geometry"/>
+        </mxCell>
+        <mxCell id="link-isp1" value="" style="endArrow=classic;html=1;strokeColor=#4caf50;strokeWidth=3;exitX=0.5;exitY=1;entryX=0.5;entryY=0;shadow=1;" edge="1" parent="1" source="internet" target="isp1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- === ПРОВАЙДЕР 2 (РЕЗЕРВ) === -->
+        <mxCell id="isp2" value="&lt;b style=&quot;color:#b71c1c;&quot;&gt;Провайдер 2&lt;/b&gt;&#xa;ether2 • 8.8.8.8&#xa;&lt;i&gt;Резерв&lt;/i&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffcdd2;strokeColor=#e53935;fontFamily=Helvetica;fontSize=12;shadow=1;gradientColor=#ef9a9a;" vertex="1" parent="1">
+          <mxGeometry x="470" y="100" width="130" height="90" as="geometry"/>
+        </mxCell>
+        <mxCell id="link-isp2" value="" style="endArrow=classic;html=1;strokeColor=#e53935;strokeWidth=3;exitX=0.5;exitY=1;entryX=0.5;entryY=0;shadow=1;" edge="1" parent="1" source="internet" target="isp2">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- === MIKROTIK CCR1036 (ОСНОВНИЙ) === -->
+        <mxCell id="ccr" value="&lt;b style=&quot;color:#e65100;&quot;&gt;CCR1036-8G-2S+&lt;/b&gt;&#xa;192.168.88.1&#xa;&lt;i&gt;Failover • NAT • Firewall&lt;/i&gt;" style="shape=mxgraph.cisco.routers.router;whiteSpace=wrap;html=1;fillColor=#fff3e0;strokeColor=#ff8f00;fontFamily=Helvetica;fontSize=12;shadow=1;gradientColor=#ffe0b2;" vertex="1" parent="1">
+          <mxGeometry x="360" y="240" width="160" height="110" as="geometry"/>
+        </mxCell>
+        <mxCell id="link-ccr1" value="ether1" style="endArrow=none;html=1;strokeColor=#4caf50;strokeWidth=4;exitX=0;exitY=0;entryX=0;entryY=1;shadow=1;" edge="1" parent="1" source="isp1" target="ccr">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="link-ccr2" value="ether2" style="endArrow=none;html=1;strokeColor=#e53935;strokeWidth=4;exitX=1;exitY=0;entryX=1;entryY=1;dashed=1;shadow=1;" edge="1" parent="1" source="isp2" target="ccr">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- === MIKROTIK RB760iGS (ДОПОМІЖНИЙ) === -->
+        <mxCell id="rb760" value="&lt;b style=&quot;color:#00695c;&quot;&gt;RB760iGS&lt;/b&gt;&#xa;SFP • PoE • VLAN&#xa;&lt;i&gt;Гостьова мережа&lt;/i&gt;" style="shape=mxgraph.cisco.switches.switch;whiteSpace=wrap;html=1;fillColor=#e0f2f1;strokeColor=#009688;fontFamily=Helvetica;fontSize=12;shadow=1;gradientColor=#b2dfdb;" vertex="1" parent="1">
+          <mxGeometry x="550" y="240" width="140" height="110" as="geometry"/>
+        </mxCell>
+        <mxCell id="link-sfp" value="SFP / LACP" style="endArrow=none;html=1;strokeColor=#009688;strokeWidth=3;dashed=1;shadow=1;curved=1;" edge="1" parent="1" source="ccr" target="rb760">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="520" y="295"/>
+              <mxPoint x="550" y="295"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- === LAN BRIDGE === -->
+        <mxCell id="lan" value="&lt;b&gt;LAN Bridge&lt;/b&gt;&#xa;192.168.88.0/24&#xa;ether3-ether5" style="shape=folder;whiteSpace=wrap;html=1;fillColor=#e8f5e8;strokeColor=#43a047;fontFamily=Helvetica;fontSize=12;shadow=1;gradientColor=#c8e6c9;" vertex="1" parent="1">
+          <mxGeometry x="360" y="400" width="160" height="90" as="geometry"/>
+        </mxCell>
+        <mxCell id="link-lan" value="" style="endArrow=none;html=1;strokeColor=#43a047;strokeWidth=3;exitX=0.5;exitY=1;entryX=0.5;entryY=0;shadow=1;" edge="1" parent="1" source="ccr" target="lan">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- === VLAN 10 (ГОСТЬОВА) === -->
+        <mxCell id="vlan" value="&lt;b style=&quot;color:#4a148c;&quot;&gt;VLAN 10&lt;/b&gt;&#xa;192.168.10.0/24&#xa;Queue: 10 Мбіт/с" style="shape=folder;whiteSpace=wrap;html=1;fillColor=#f3e5f5;strokeColor=#7b1fa2;fontFamily=Helvetica;fontSize=12;shadow=1;gradientColor=#e1bee7;" vertex="1" parent="1">
+          <mxGeometry x="550" y="400" width="140" height="90" as="geometry"/>
+        </mxCell>
+        <mxCell id="link-vlan" value="VLAN 10" style="endArrow=none;html=1;strokeColor=#7b1fa2;strokeWidth=3;dashed=1;shadow=1;" edge="1" parent="1" source="rb760" target="vlan">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- === БЛОК РФ === -->
+        <mxCell id="block-ru" value="&lt;b style=&quot;color:#c62828;&quot;&gt;БЛОК РФ&lt;/b&gt;&#xa;~45 000 IP&#xa;Автооновлення" style="shape=mxgraph.cisco.security.firewall;whiteSpace=wrap;html=1;fillColor=#ffebee;strokeColor=#c62828;fontFamily=Helvetica;fontSize=12;shadow=1;gradientColor=#ffcdd2;" vertex="1" parent="1">
+          <mxGeometry x="180" y="240" width="120" height="90" as="geometry"/>
+        </mxCell>
+        <mxCell id="link-block" value="address-list" style="endArrow=block;html=1;strokeColor=#c62828;strokeWidth=4;dashed=1;shadow=1;curved=1;" edge="1" parent="1" source="block-ru" target="ccr">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="300" y="285"/>
+              <mxPoint x="360" y="285"/>
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- === GRAPHING === -->
+        <mxCell id="graph" value="&lt;b style=&quot;color:#2e7d32;&quot;&gt;Graphing&lt;/b&gt;&#xa;Трафік WAN/LAN&#xa;WinBox → Tools" style="shape=mxgraph.cisco.monitoring.graph;whiteSpace=wrap;html=1;fillColor=#e8f5e8;strokeColor=#2e7d32;fontFamily=Helvetica;fontSize=12;shadow=1;gradientColor=#c8e6c9;" vertex="1" parent="1">
+          <mxGeometry x="720" y="240" width="120" height="90" as="geometry"/>
+        </mxCell>
+        <mxCell id="link-graph" value="" style="endArrow=none;html=1;strokeColor=#2e7d32;strokeWidth=3;shadow=1;" edge="1" parent="1" source="graph" target="ccr">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- === ЛЕГЕНДА === -->
+        <mxCell id="legend" value="&lt;b style=&quot;color:#1565c0;&quot;&gt;Легенда&lt;/b&gt;&#xa;• &lt;font color=&quot;#4caf50&quot;&gt;Зелений&lt;/font&gt; — Основний WAN&#xa;• &lt;font color=&quot;#e53935&quot;&gt;Червоний&lt;/font&gt; — Резерв&#xa;• &lt;font color=&quot;#7b1fa2&quot;&gt;Фіолетовий&lt;/font&gt; — VLAN 10&#xa;• &lt;font color=&quot;#c62828&quot;&gt;Блок&lt;/font&gt; — РФ&#xa;• &lt;font color=&quot;#2e7d32&quot;&gt;Графік&lt;/font&gt; — Моніторинг" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff9c4;strokeColor=#ff8f00;fontFamily=Helvetica;fontSize=11;shadow=1;align=left;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="50" y="520" width="220" height="120" as="geometry"/>
+        </mxCell>
+
+        <!-- === ПІДПИС АВТОРА === -->
+        <mxCell id="author" value="&lt;i style=&quot;font-size:10px;color:#777;&quot;&gt;© 2025 @M1rwana12 • Україна&lt;/i&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;fontFamily=Helvetica;" vertex="1" parent="1">
+          <mxGeometry x="380" y="660" width="400" height="20" as="geometry"/>
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
