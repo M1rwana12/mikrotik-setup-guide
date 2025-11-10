@@ -1,1 +1,0 @@
-# mikrotik-setup-guide
